@@ -1,0 +1,10 @@
+{
+  "globalDependencies": {
+    "node": "registry:dt/node#7.0.0+20170322231424"
+  },
+  "dependencies": {
+    "pngjs2": "registry:dt/pngjs2#2.0.0+20160510010627",
+    "request": "registry:npm/request#2.69.0+20160428223725",
+    "ws": "registry:dt/ws#0.0.0+20170307231658"
+  }
+}

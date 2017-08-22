@@ -1,0 +1,22 @@
+{
+  "apiOrigin": "",
+  "apiKey": "",
+  "usersData": {
+    "15d8f8a437e": {
+      "nickname": "admin",
+      "userName": "bishi",
+      "passWord": "password",
+      "accessToken": "",
+      "cookie": "",
+      "status": false
+    },
+    "15d8f8ec948": {
+      "nickname": "user",
+      "userName": "碧诗",
+      "passWord": "password",
+      "accessToken": "",
+      "cookie": "",
+      "status": false
+    }
+  }
+}

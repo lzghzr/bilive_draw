@@ -1,0 +1,15 @@
+{
+  "name": "bilive_draw_client",
+  "version": "0.0.2",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "request": "^2.81.0",
+    "ws": "^2.3.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lzghzr",
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "bilive_draw_server",
+  "version": "0.0.3",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "pngjs": "^3.2.0",
+    "request": "^2.81.0",
+    "ws": "^3.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lzghzr",
+  "license": "Apache-2.0"
+}
