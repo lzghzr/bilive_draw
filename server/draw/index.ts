@@ -28,6 +28,7 @@ export class BiliDraw {
    * @memberof BiliDraw
    */
   public async Start() {
+    this._GifLoop()
     this._ClockLoop()
     await this._GetBitmap()
     this._commentClient = new CommentClient(5446)
@@ -55,6 +56,9 @@ export class BiliDraw {
       .Connect()
     this._WSServer = new WSServer()
     this._WSServer.Start()
+    setInterval(() => {
+      this._GetBitmap()
+    }, 600000)
   }
   /**
    * 获取像素图
@@ -72,27 +76,6 @@ export class BiliDraw {
           let apiData = options[apiKey]
           if (apiData.status) {
             let apiDraw: string[] = []
-            if (apiData.gif != null) {
-              let gifData = apiData.gif
-              if (apiData.data === '') {
-                apiData.data = gifData.bitmaps[gifData.index]
-                gifData.build = 1
-              }
-              if (gifData.build === 0) {
-                gifData.index += 1
-                if (gifData.index >= gifData.bitmaps.length) gifData.index = 0
-                tools.Log(apiKey, 'index', gifData.index)
-                gifData.build = 2
-                setTimeout(() => {
-                  if (gifData != null) {
-                    tools.Log(apiKey, 'building', gifData.index);
-                    gifData.build = 3
-                    apiData.data = gifData.bitmaps[gifData.index]
-                  }
-                }, gifData.cooltime * 60000)
-              }
-              if (gifData.build === 3) gifData.build = 1
-            }
             for (let i in <any>apiData.data) {
               let dxmap = this._GetXY(parseInt(i), apiData.width)
                 , x = apiData.x + dxmap.x
@@ -107,11 +90,44 @@ export class BiliDraw {
           }
         }
       }
-      setTimeout(() => {
-        this._GetBitmap()
-      }, 600000)
     }
     else this._GetBitmap()
+  }
+  /**
+   * GIF
+   * 
+   * @private
+   * @memberof BiliDraw
+   */
+  private _GifLoop() {
+    for (let apiKey in options) {
+      let apiData = options[apiKey]
+      if (apiData.status && apiData.gif != null) {
+        let gifData = apiData.gif
+        if (apiData.data === '') {
+          apiData.data = gifData.bitmaps[gifData.index]
+          gifData.build = 1
+        }
+        if (gifData.build === 0) {
+          gifData.index += 1
+          if (gifData.index >= gifData.bitmaps.length) gifData.index = 0
+          tools.Log(apiKey, 'index', gifData.index)
+          gifData.build = 2
+          setTimeout(async () => {
+            if (gifData != null) {
+              tools.Log(apiKey, 'building', gifData.index);
+              apiData.data = gifData.bitmaps[gifData.index]
+              await this._GetBitmap()
+              gifData.build = 3
+            }
+          }, gifData.cooltime * 60000)
+        }
+        if (gifData.build === 3) gifData.build = 1
+      }
+    }
+    setTimeout(() => {
+      this._GifLoop()
+    }, 10000)
   }
   /**
    * 时钟
@@ -124,13 +140,7 @@ export class BiliDraw {
       let apiData = options[apiKey]
       if (apiData.status && apiData.clock != null) {
         let apiClock = apiData.clock
-        if (apiData.gif != null) {
-          if (apiClock.wait && apiData.gif.build === 1) continue
-          if (apiData.data === '') {
-            apiData.data = apiData.gif.bitmaps[apiData.gif.index]
-            apiData.gif.build = 1
-          }
-        }
+        if (apiData.gif != null && apiClock.wait && apiData.gif.build === 1) continue
         let cstTime = Date.now() + 2.88e7
           , cst = new Date(cstTime)
           , cstHours = cst.getUTCHours() < 10 ? `0${cst.getUTCHours()}` : cst.getUTCHours().toString()
